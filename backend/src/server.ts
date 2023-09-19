@@ -31,9 +31,7 @@ app.get('/ads', (req, res) => {
   let results = []
   if ('title' in req.query) {
     const filterTitle = req.query.title.toLowerCase()
-
-    const filterText = req.query.title.toLowerCase()
-    const filterRegExp = new RegExp(filterText, 'i') // insensible a al cass i
+    const filterRegExp = new RegExp(filterTitle, 'i') // insensible a al cass i
     results = ads.filter(
       (ad) => ad.title && filterRegExp.test(ad.title.toLowerCase())
     )
