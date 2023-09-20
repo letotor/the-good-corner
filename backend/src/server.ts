@@ -1,8 +1,10 @@
 console.log(' the good corner!')
+const sqlite = require('sqlite3')
 import { Ads, Location } from './types'
 
 const PORT = 3000
 const express = require('express')
+const db = new sqlite.Database('./bdd/db.sqlite')
 
 const ads: Ads[] = Array.from({ length: 100 }, (_, i) => ({
   id: i + 1,
@@ -25,6 +27,11 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
   return res.send('API OK')
+})
+app.get('/ad', (req, res) => {
+  db.all('SELECT * FROM Ads', (err, rows) => {
+    res.send(rows)
+  })
 })
 
 app.get('/ads', (req, res) => {
