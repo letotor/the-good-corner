@@ -1,16 +1,17 @@
 ### GET ROOT
 GET http://localhost:3000/
 
-
 ### GET /ads
 GET http://localhost:3000/ads
 
 ### GET /ads/:id
-GET http://localhost:3000/ads/4
+GET http://localhost:3000/ads/2
 
-### POST /ads
-POST http://localhost:3000/ads/
-content-type: application/json,
+### DELET /ads/:id
+DELETE http://localhost:3000/ads/2
+
+### PATCH /ads/:id
+PATCH http://localhost:3000/ads/3
 
 {
 	"title": "Titre 33",
@@ -19,7 +20,20 @@ content-type: application/json,
 	"picture": "http://placehold.it/32x32",
 	"location": "nantes",
 	"category": "categoryA"
-	}
+}
+
+### POST /ads
+POST http://localhost:3000/ads/
+content-type: application/json
+
+{
+	"title": "Titresdsdsd 33",
+	"description": "description",
+	"price": "price",
+	"picture": "http://placehold.it/32x32",
+	"location": "nantes",
+	"category": "categoryA"
+}
 
 
 ### GET category 
