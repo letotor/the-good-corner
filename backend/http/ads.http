@@ -1,0 +1,43 @@
+### GET ROOT
+GET http://localhost:3000/
+
+
+### GET /ads
+GET http://localhost:3000/ads
+
+### GET /ads/:id
+GET http://localhost:3000/ads/4
+
+### POST /ads
+POST http://localhost:3000/ads/
+content-type: application/json,
+
+{
+	"title": "Titre 33",
+	"description": "description",
+	"price": "price",
+	"picture": "http://placehold.it/32x32",
+	"location": "nantes",
+	"category": "categoryA"
+	}
+
+
+### GET category 
+GET http://localhost:3000/category/
+
+### GET /category/:id
+GET http://localhost:3000/category/1
+
+### GET /category/:id/ads recupere les annonces d'une categorie
+GET http://localhost:3000/category/1/ads
+
+### AJOUT category
+POST http://localhost:3000/category/
+content-type: application/json
+
+{
+	"name": "mobilier"
+}
+
+
+

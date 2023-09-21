@@ -1,4 +1,13 @@
 -- SQLite
+
+
+-- CREATION DE LA TABLE CATEGORY 
+CREATE TABLE CATEGORY (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name varchar(50) NOT NULL
+);
+
+-- CREATION DE LA BASE DE DONNEE
 CREATE TABLE ADS (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title varchar(50) NOT NULL,
@@ -7,15 +16,31 @@ CREATE TABLE ADS (
     picture varchar(128),
     location varchar(50),
     category  INTEGER,
-    date DATE
+    date DATE,
+    FOREIGN KEY(category) REFERENCES CATEGORY(id)
 );
 
 
+
+-- INSERTION DES DONNEE DANS LA TABLE CATEGORY
+PRAGMA foreign_keys = ON;
+INSERT INTO CATEGORY (name) VALUES ('Vêtement'),,('Téléphonie'), ('Immobilier'), ('Véhicules'), ('Informatique'), ('Maison'), ('Emploi'), ('Loisirs'), ('Mode'), ('Multimédia'), ('Hifi'), ('Matériel professionnel'), ('Musique'), ('Montres & Bijoux'), ('Jeux vidéo & Consoles'), ('Sacs & Accessoires'), ('Autres');
+
+
+-- TEST insertion ORPHAN
+PRAGMA foreign_keys = ON;
+INSERT INTO ADS (title, description, price, picture, location, category, date) VALUES ('iPhone 13 Pro', 'iPhone 13 Pro 256 Go en excellent état', 900, 'iphone.jpg', 'Paris', 30, '2023-09-20');
+-- VIDER LA TABLE si NECESSAIRE
+--  TRUNCATE TABLE ad;
+-- INSERTION DES DONNEe
+PRAGMA foreign_keys = ON;
 INSERT INTO ADS (title, description, price, picture, location, category, date)
 VALUES
   ('iPhone 13 Pro', 'iPhone 13 Pro 256 Go en excellent état', 900, 'iphone.jpg', 'Paris', 1, '2023-09-20'),
+  ('iPhone 12 Pro', 'iPhone 12 bon état', 300, 'iphone.jpg', 'Paris', 1, '2022-09-20'),
     ('Appartement à louer', 'Appartement 2 pièces, proche du centre-ville', 800, 'appartement.jpg', 'Lyon', 2, '2023-09-21'),
     ('Vélo de montagne', 'Vélo de montagne tout suspendu, en parfait état', 300, 'velo.jpg', 'Bordeaux', 3, '2023-09-22'),
+    ('Vélo de ville', 'Vélo de ville suspendu, en  état', 200, 'velo.jpg', 'Bordeaux', 3, '2023-09-22'),
     ('Ordinateur portable Dell', 'Ordinateur portable Dell XPS 15, 16 Go de RAM', 1200, 'dell.jpg', 'Paris', 4, '2023-09-23'),
     ('Studio meublé', 'Studio meublé, toutes charges comprises', 600, 'studio.jpg', 'Lyon', 2, '2023-09-24'),
     ('Table de salle à manger', 'Table en bois massif avec 6 chaises assorties', 250, 'table.jpg', 'Bordeaux', 5, '2023-09-25'),
@@ -37,6 +62,23 @@ VALUES
 -- AFFICHAGE DES ANNONCES
 SELECT * FROM ADS;
 
+-- 
+SELECT * FROM CATEGORY;
+
+-- AFFICHAGE DES ANNONCES avec NOM DE CATEGORIE filtrer p category
+SELECT ads.title,ads.price,ads.description , ads.location, ads.date ,cat.id as catId, cat.name as categoryName FROM  ADS as ads
+LEFT JOIN CATEGORY as cat ON cat.id = ads.category WHERE LOWER(categoryName) in ('téléphonie','immobilier');
+
+-- AFFICHAGE DU PRIX MOYEN DSE ANNONCES de la categorie de la category telephonie
+SELECT AVG(ads.price)
+FROM ads
+INNER JOIN category AS cat ON cat.id = ads.category
+WHERE LOWER(cat.name) = 'téléphonie';
+
+--Afficher les annonces des catégories dont le nom commence par un “v”
+SELECT ads.* ,cat.id as catId, cat.name as categoryName FROM  ADS as ads
+LEFT JOIN CATEGORY as cat ON cat.id = ads.category WHERE LOWER(ads.title) LIKE 'v%';
+
 -- AFFICHAGE DES ANNONCES PAR VILLE
 SELECT * FROM ADS WHERE LOWER(location) = 'bordeaux';
 
@@ -50,6 +92,12 @@ UPDATE ADS SET price=0 WHERE date='2023-09-01'
 -- AFFICHAGE DE la moynne des prix des annonces a paris 
 SELECT AVG(price) FROM ADS WHERE LOWER(location) = 'paris';
 
---BONUS DE la moynne des prix des annonces par ville 
-SELECT location, AVG(price) FROM ADS GROUP BY location;
+--BONUS DE la moynne des prix des
+SELECT AVG(price),location FROM ADS GROUP BY location;
 
+
+DELETE FROM ADS WHERE id = 23;
+
+
+
+-- 
