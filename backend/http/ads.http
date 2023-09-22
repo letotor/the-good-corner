@@ -8,7 +8,7 @@ GET http://localhost:3000/ads
 GET http://localhost:3000/ads/2
 
 ### DELET /ads/:id
-DELETE http://localhost:3000/ads/2
+DELETE http://localhost:3000/ads/1
 
 ### PATCH /ads/:id
 PATCH http://localhost:3000/ads/3

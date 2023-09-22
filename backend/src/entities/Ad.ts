@@ -28,20 +28,25 @@ export class Ad extends BaseEntity {
 
   // Ajoutez d'autres colonnes au besoin
   constructor(
-    title: string,
-    description: string,
-    price: number,
-    picture: string,
-    location: string,
-    category: string
+    title?: string,
+    description?: string,
+    price?: number,
+    picture?: string,
+    location?: string,
+    category?: string
   ) {
     super()
+    if (!title || !description || !price || !picture || !location || !category) {
+        return 
+    }
     this.title = title
     this.description = description
     this.price = price
     this.picture = picture
     this.location = location
     this.category = category
-    this.date = new Date(Date.now().toLocaleString())
+    this.date = new Date(Date.now())
   }
+
+
 }

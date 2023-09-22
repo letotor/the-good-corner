@@ -1,12 +1,16 @@
 **/node_modules/*
-**/dist
+
+
+# BDD 
 *.sqlite
+*.db
 
 # testing
 /coverage
 
 # production
 /build
+**/dist
 
 # misc
 .DS_Store

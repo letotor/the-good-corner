@@ -1,9 +1,12 @@
-// const adsRouter : any = require('./ads.routes')
+import { Express } from 'express'
+import routerAds from './ads.router'
+import routerCategory from './category.router'
 
-// const setupRoutes = (app) => {
-//   app.use('/api/ads', adsRouter)
-// }
+export default function setupRoutes(app: Express) {
+  app.get('/api', (_req, res) => {
+    res.send('API OK')
+  })
 
-// module.exports = {
-//   setupRoutes,
-// }
+  app.use('/api/ads', routerAds)
+  app.use('/api/category', routerCategory)
+}
