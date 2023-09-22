@@ -4,11 +4,11 @@ import { CategoryController } from '../controller/Category'
 const routerCategory = Router()
 
 const categoriesController = new CategoryController()
-routerCategory.get('/categories', categoriesController.getAll)
-routerCategory.get('/categories/:id', categoriesController.getOne)
-routerCategory.post('/categories', categoriesController.createOne)
-routerCategory.delete('/categories/:id', categoriesController.deleteOne)
-routerCategory.patch('/categories/:id', categoriesController.patchOne)
-routerCategory.put('/categories/:id', categoriesController.updateOne)
+routerCategory.get('/', categoriesController.getAll)
+routerCategory.get('/:id', categoriesController.getOne)
+routerCategory.post('', categoriesController.createOne)
+routerCategory.delete('/:id', categoriesController.deleteOne)
+routerCategory.patch('/:id', categoriesController.patchOne)
+routerCategory.put('/:id', categoriesController.updateOne)
 
 export default routerCategory

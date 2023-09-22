@@ -49,9 +49,21 @@ export class AdsController implements Icontroller {
     }
   }
 
-  async updateOne(req: Request, res: Response): Promise<any> {
-    return
-  }
+  // async updateOne(req: Request, res: Response): Promise<any> {
+  //  try {
+  //  if(!req.body) return res.status(400).send('body is missing')
+  //
+  //   ad = req.body
+  //  const adSearch = dataSource().getRepository(Ad).findOneBy({id: Number(req.params.id)})
+  //     if(!idSearch) return(res.status(400).json({message: `id ${req.params.id} not found`})
+  // //const adUpdate = new Ad(...ad)
+  // res.status(204).send('not yet isOctal(value)')
+  //  } catch (error : any) {
+  //
+  //   console.error(error)
+  //       res.status(500).json({message : error})
+  //  }
+  // }
 
   async patchOne(req: Request, res: Response): Promise<any> {
     try {
@@ -83,6 +95,11 @@ export class AdsController implements Icontroller {
       res.status(500).json({ message: err.stack })
     }
   }
+
+  async updateOne(req: Request, res: Response): Promise<any> {
+    res.status(204).send('not yet')
+  }
+
   async deleteOne(req: Request, res: Response): Promise<any> {
     if (!req.params.id) {
       return res.status(400).send('id is missing')
