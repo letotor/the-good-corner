@@ -2,17 +2,25 @@ import Icontroller from '.'
 import { Request, Response } from 'express'
 import { validate } from 'class-validator'
 import { Ad } from '../entities'
-import { dataSource } from '../dataSource/dbConnection'
+// on travail ici en modele ACtive Record(BaseEntity) et non Data mapper ( repository ) , c'est le model utilisé par prisma optimisé
 
 export class AdsController implements Icontroller {
+  async getAll(_req: Request, res: Response): Promise<any> {
+    try {
+      const ads = await Ad.find({ relations: ['category'] })
+      res.status(200).json(ads)
+    } catch (err: any) {
+      // Cf les typeguards
+      res.status(500).json({ message: err.stack })
+    }
+  }
+
   async getOne(req: Request, res: Response): Promise<any> {
     if (!req.params.id) {
       return res.status(400).send('id is missing')
     }
 
-    const ad = await dataSource
-      .getRepository(Ad)
-      .findOneBy({ id: Number(req.params.id) })
+    const ad = await Ad.findOneBy({ id: Number(req.params.id) })
     if (!ad) {
       return res
         .status(404)
@@ -21,28 +29,24 @@ export class AdsController implements Icontroller {
     res.status(200).send(ad)
   }
 
-  async getAll(req: Request, res: Response): Promise<any> {
-    try {
-      const ads = await dataSource.getRepository(Ad).find()
-      res.status(200).json(ads)
-    } catch (err: any) {
-      // Cf les typeguards
-      res.status(500).json({ message: err.stack })
-    }
-  }
-
   async createOne(req: Request, res: Response): Promise<any> {
     try {
       const { title, description, price, picture, location, category, date } =
         req.body
-      const ad = new Ad(title, description, price, picture, location, category)
+      const ad = new Ad()
+      ad.title = title
+      ad.description = description
+      ad.price = price
+      ad.picture = picture
+      ad.location = location
+      ad.category = category
 
       const errors = await validate(ad)
       if (errors.length > 0) {
         throw new Error('validation failed')
       } else {
-        const adSave = await ad.save()
-        res.status(201).json(adSave)
+        await ad.save()
+        res.status(201).json(ad)
       }
     } catch (err: any) {
       res.status(500).json({ message: err.stack })
@@ -73,9 +77,7 @@ export class AdsController implements Icontroller {
       if (!req.body) {
         return res.status(400).send('body is missing')
       }
-      let ad = await dataSource
-        .getRepository(Ad)
-        .findOneBy({ id: Number(req.params.id) })
+      let ad = await Ad.findOneBy({ id: Number(req.params.id) })
       if (!ad) {
         return res
           .status(404)
@@ -84,11 +86,11 @@ export class AdsController implements Icontroller {
 
       // update
 
-      const adUpdate = dataSource.getRepository(Ad).merge(ad, req.body)
+      const adUpdate = await Ad.merge(ad, req.body)
       if (!adUpdate) {
         return res.status(404).json({ message: `ad with id  not found` })
       }
-      await dataSource.getRepository(Ad).save(adUpdate)
+      await Ad.save(adUpdate)
       res.status(201).json(adUpdate)
     } catch (err: any) {
       console.error(err.stack)
@@ -104,9 +106,7 @@ export class AdsController implements Icontroller {
     if (!req.params.id) {
       return res.status(400).send('id is missing')
     }
-    const adToRemve = await dataSource
-      .getRepository(Ad)
-      .delete(Number(req.params.id))
+    const adToRemve = await Ad.delete(Number(req.params.id))
     console.log(adToRemve)
 
     if (adToRemve.affected == 0) {

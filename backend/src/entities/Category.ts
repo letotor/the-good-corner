@@ -1,5 +1,12 @@
 // import { Category } from './Category';
-import { Entity,ManyToOne, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+} from 'typeorm'
+import { Ad } from './Ad'
 import { Length } from 'class-validator'
 
 @Entity()
@@ -13,14 +20,6 @@ export class Category extends BaseEntity {
   })
   name!: string
 
-
-  // @ManyToOne(() => Category, (category) => category.ads)
-  // category!:Category
-  
-  constructor(name: string) {
-    super()
-    this.name = name
-    // this.category = category
-  }
-
+  @OneToMany(() => Ad, (ad) => ad.category)
+  ads!: Ad[]
 }

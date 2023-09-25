@@ -21,7 +21,7 @@ CREATE TABLE ADS (
 
 
 -- INSERTION DES DONNEE DANS LA TABLE CATEGORY
-PRAGMA foreign_keys = ON;
+PRAGMA foreign_keys = ON; -- permet de garder les relation entre talbe et contrainte pour ne pas effacer et casser la structure
 INSERT INTO CATEGORY (name) VALUES ('Vêtement'),('Téléphonie'), ('Immobilier'), ('Véhicules'), ('Informatique'), ('Maison'), ('Emploi'), ('Loisirs'), ('Mode'), ('Multimédia'), ('Hifi'), ('Matériel professionnel'), ('Musique'), ('Montres & Bijoux'), ('Jeux vidéo & Consoles'), ('Sacs & Accessoires'), ('Autres');
 
 -- VIDER LA TABLE si NECESSAIRE
@@ -30,7 +30,7 @@ INSERT INTO CATEGORY (name) VALUES ('Vêtement'),('Téléphonie'), ('Immobilier'
 
 -- INSERTION DES DONNEe
 PRAGMA foreign_keys = ON;
-INSERT INTO Ads (title, description, price, picture, location, category, dateAtCreated,owner )
+INSERT INTO Ad (title, description, price, picture, location, category, dateAtCreated,owner )
 VALUES
   ('iPhone 13 Pro', 'iPhone 13 Pro 256 Go en excellent état', 900, 'iphone.jpg', 'Paris', 1, '2023-09-20', 'Jean Dupont'),
   ('iPhone 12 Pro', 'iPhone 12 bon état', 300, 'iphone.jpg', 'Paris', 1, '2022-09-20', 'Marie Martin'),
@@ -89,7 +89,7 @@ SELECT AVG(price) FROM ADS WHERE LOWER(location) = 'paris';
 --BONUS DE la moynne des prix des
 SELECT AVG(price),location FROM ADS GROUP BY location;
 
-
+PRAGMA foreign_keys = ON
 DELETE FROM ADS WHERE id = 23;
 
 

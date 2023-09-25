@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  ManyToOne,
+} from 'typeorm'
+import { Length, ValidateIf } from 'class-validator'
+import { Category } from './Category'
 
 @Entity()
 export class Ad extends BaseEntity {
@@ -8,7 +16,9 @@ export class Ad extends BaseEntity {
   @Column()
   title!: string
 
-  @Column()
+  @Column({ nullable: true })
+  @Length(0, 5000)
+  @ValidateIf((object, value) => !!value)
   description!: string
 
   @Column()
@@ -21,32 +31,11 @@ export class Ad extends BaseEntity {
   location!: string
 
   @Column()
+  owner!: string
+
+  @ManyToOne(() => Category, (category) => category.ads)
   category!: string
 
   @Column()
-  date!: Date
-
-  // Ajoutez d'autres colonnes au besoin
-  constructor(
-    title?: string,
-    description?: string,
-    price?: number,
-    picture?: string,
-    location?: string,
-    category?: string
-  ) {
-    super()
-    if (!title || !description || !price || !picture || !location || !category) {
-        return 
-    }
-    this.title = title
-    this.description = description
-    this.price = price
-    this.picture = picture
-    this.location = location
-    this.category = category
-    this.date = new Date(Date.now())
-  }
-
-
+  dateAtCreated!: Date
 }

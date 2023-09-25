@@ -7,7 +7,7 @@ import { dataSource } from '../dataSource/dbConnection'
 export class CategoryController implements Icontroller {
   async getAll(req: Request, res: Response): Promise<any> {
     try {
-      const categories = await dataSource.getRepository(Category).find()
+      const categories = await Category.find()
       res.status(200).json(categories)
     } catch (err: any) {
       res.status(500).json({ message: err.stack })
@@ -19,9 +19,7 @@ export class CategoryController implements Icontroller {
       return res.status(400).send('id is missing')
     }
     //const ad = Ad.findByOne({ id: Number(req.params.id) })
-    const ad = await dataSource
-      .getRepository(Category)
-      .findOneBy({ id: Number(req.params.id) })
+    const ad = await Category.findOneBy({ id: Number(req.params.id) })
     if (!ad) {
       return res
         .status(404)
@@ -34,7 +32,8 @@ export class CategoryController implements Icontroller {
     try {
       const { name } = req.body
       if (!name) return res.status(400).json({ message: 'name is missing' })
-      const category = new Category(name)
+      const category = new Category()
+      category.name = name
 
       const errors = await validate(category)
       if (errors.length > 0) {
@@ -63,16 +62,14 @@ export class CategoryController implements Icontroller {
       if (!req.body) {
         return res.status(400).send('body is missing')
       }
-      let cat = await dataSource
-        .getRepository(Category)
-        .findOneBy({ id: Number(req.params.id) })
+      let cat = await Category.findOneBy({ id: Number(req.params.id) })
       if (!cat) {
         return res
           .status(404)
           .json({ message: `cat with id ${req.params.id} not found` })
       }
 
-      const catUpdate = dataSource.getRepository(Category).merge(cat, req.body)
+      const catUpdate = Category.merge(cat, req.body)
       if (!catUpdate) {
         return res.status(404).json({ message: `ad with id  not found` })
       }
@@ -87,9 +84,7 @@ export class CategoryController implements Icontroller {
     if (!req.params.id) {
       return res.status(400).send('id is missing')
     }
-    const categoryToRemve = await dataSource
-      .getRepository(Category)
-      .delete(Number(req.params.id))
+    const categoryToRemve = await Category.delete(Number(req.params.id))
     console.log(categoryToRemve)
 
     if (categoryToRemve.affected == 0) {
