@@ -9,4 +9,7 @@ export default function setupRoutes(app: Express) {
 
   app.use('/api/ads', routerAds)
   app.use('/api/category', routerCategory)
+  app.all('*', (req, res) => {
+    res.status(404).send('<h1 style={background: black}>Page not found</h1>')
+  })
 }

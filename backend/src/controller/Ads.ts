@@ -1,3 +1,4 @@
+import { Category } from './../entities/Category'
 import Icontroller from '.'
 import { Request, Response } from 'express'
 import { validate } from 'class-validator'
@@ -16,22 +17,30 @@ export class AdsController implements Icontroller {
   }
 
   async getOne(req: Request, res: Response): Promise<any> {
-    if (!req.params.id) {
-      return res.status(400).send('id is missing')
-    }
+    try {
+      if (!req.params.id) {
+        return res.status(400).send('id is missing')
+      }
 
-    const ad = await Ad.findOneBy({ id: Number(req.params.id) })
-    if (!ad) {
-      return res
-        .status(404)
-        .json({ message: `ad wilth id ${req.params.id} not found` })
+      const ad = await Ad.findOne({
+        where: { id: Number(req.params.id) },
+        relations: ['category'],
+      })
+      if (!ad) {
+        return res
+          .status(404)
+          .json({ message: `ad wilth id ${req.params.id} not found` })
+      }
+      res.status(200).send(ad)
+    } catch (err: any) {
+      // Cf les typeguards
+      res.status(500).json({ message: err.stack })
     }
-    res.status(200).send(ad)
   }
 
   async createOne(req: Request, res: Response): Promise<any> {
     try {
-      const { title, description, price, picture, location, category, date } =
+      const { title, description, price, picture, owner, location, category } =
         req.body
       const ad = new Ad()
       ad.title = title
@@ -39,7 +48,9 @@ export class AdsController implements Icontroller {
       ad.price = price
       ad.picture = picture
       ad.location = location
-      ad.category = category
+      ad.category = { ...category }
+      ad.owner = owner
+      ad.dateAtCreated = new Date(Date.now())
 
       const errors = await validate(ad)
       if (errors.length > 0) {
@@ -71,30 +82,30 @@ export class AdsController implements Icontroller {
 
   async patchOne(req: Request, res: Response): Promise<any> {
     try {
-      if (!req.params.id) {
-        return res.status(400).send('id is missing')
-      }
-      if (!req.body) {
-        return res.status(400).send('body is missing')
-      }
-      let ad = await Ad.findOneBy({ id: Number(req.params.id) })
+      const ad = await Ad.findOne({
+        where: { id: Number(req.params.id) },
+        relations: ['category'],
+      })
+
       if (!ad) {
-        return res
-          .status(404)
-          .json({ message: `ad with id ${req.params.id} not found` })
+        return res.status(404).send()
+      }
+      console.log('111111111111111', ad)
+
+      const resz = Object.assign(ad, req.body)
+      console.log('111111111111112', resz)
+
+      const errors = await validate(ad)
+
+      if (errors.length > 0) {
+        return res.status(400).json({ errors: errors })
       }
 
-      // update
-
-      const adUpdate = await Ad.merge(ad, req.body)
-      if (!adUpdate) {
-        return res.status(404).json({ message: `ad with id  not found` })
-      }
-      await Ad.save(adUpdate)
-      res.status(201).json(adUpdate)
-    } catch (err: any) {
-      console.error(err.stack)
-      res.status(500).json({ message: err.stack })
+      await ad.save()
+      return res.status(204).send()
+    } catch (error) {
+      console.error(error)
+      return res.status(500).json({ error: 'Une erreur interne est survenue' })
     }
   }
 
@@ -103,18 +114,17 @@ export class AdsController implements Icontroller {
   }
 
   async deleteOne(req: Request, res: Response): Promise<any> {
-    if (!req.params.id) {
+    const AdId = Number(req.params.id)
+    if (!AdId) {
       return res.status(400).send('id is missing')
     }
-    const adToRemve = await Ad.delete(Number(req.params.id))
-    console.log(adToRemve)
+    const adExist = await Ad.findOne({ where: { id: AdId } })
 
-    if (adToRemve.affected == 0) {
-      return res
-        .status(404)
-        .json({ message: `ad with id ${req.params.id} not found` })
+    if (!adExist) {
+      return res.status(404).json({ message: `ad with id ${AdId} not found` })
     }
-    res.status(204).json({ message: `ad with id ${req.params.id} deleted` })
+    await Ad.remove(adExist)
+    res.status(204).send()
     // const ad = await dataSource
     //   .getRepository(Ad)
     //   .findOne({ where: { id: Number(req.params.id) } })

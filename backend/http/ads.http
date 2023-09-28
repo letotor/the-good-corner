@@ -1,46 +1,42 @@
-### GET ROOT
-GET http://localhost:3000/
-
+@port = 5000
+@baseURL = http://localhost:{{port}}/api
 ### GET /ads
-GET http://localhost:3000/ads
+GET {{baseURL}}/ads
 
 ### GET /ads/:id
-GET http://localhost:3000/ads/2
+GET  {{baseURL}}/ads/25
 
-### DELET /ads/:id
-DELETE http://localhost:3000/ads/1
-
-### PATCH /ads/:id
-PATCH http://localhost:3000/ads/3
-
-{
-	"title": "Titre 33",
-	"description": "description",
-	"price": "price",
-	"picture": "http://placehold.it/32x32",
-	"location": "nantes",
-	"category": "categoryA"
-}
 
 ### POST /ads
-POST http://localhost:3000/ads/
+POST  {{baseURL}}/ads/
 content-type: application/json
 
 {
-	"title": "Titresdsdsd 33",
+	"title": "Mon titre XXsssssX",
 	"description": "description",
-	"price": "price",
+	"price": 11,
+	"owner" : "mon user",
 	"picture": "http://placehold.it/32x32",
 	"location": "nantes",
-	"category": "categoryA"
+	"category": {"id" : 5}
 }
 
+### DELETE /ads/:id
+DELETE  {{baseURL}}/ads/22
+
+### PATCH /ads/:id
+PATCH  {{baseURL}}/ads/25
+content-type: application/json
+
+{
+	"title": "Mon titre sfffffff"
+}
 
 ### GET category 
-GET http://localhost:3000/category/
+GET  {{baseURL}}/category/
 
 ### GET /category/:id
-GET http://localhost:3000/category/1
+GET  {{baseURL}}/category/1
 
 ### GET /category/:id/ads recupere les annonces d'une categorie
 GET http://localhost:3000/category/1/ads

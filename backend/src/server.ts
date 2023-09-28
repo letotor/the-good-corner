@@ -2,10 +2,11 @@ import express from 'express'
 import 'reflect-metadata'
 console.log(' the good corner!')
 import { dataSource } from './dataSource/dbConnection'
-
+import cors from 'cors'
 import setupRoutes from './routes'
-const PORT = 3000
+const PORT = 5000
 const app = express()
+app.use(cors())
 app.use(express.json())
 setupRoutes(app)
 

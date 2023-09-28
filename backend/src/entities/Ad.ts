@@ -5,7 +5,7 @@ import {
   BaseEntity,
   ManyToOne,
 } from 'typeorm'
-import { Length, ValidateIf } from 'class-validator'
+import { Length, ValidateIf, IsInt } from 'class-validator'
 import { Category } from './Category'
 
 @Entity()
@@ -22,6 +22,7 @@ export class Ad extends BaseEntity {
   description!: string
 
   @Column()
+  @IsInt()
   price!: number
 
   @Column()
@@ -34,7 +35,7 @@ export class Ad extends BaseEntity {
   owner!: string
 
   @ManyToOne(() => Category, (category) => category.ads)
-  category!: string
+  category!: Category
 
   @Column()
   dateAtCreated!: Date
