@@ -1,12 +1,16 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
   Column,
   BaseEntity,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm'
 import { Length, ValidateIf, IsInt } from 'class-validator'
 import { Category } from './Category'
+import { Tag } from './Tag'
 
 @Entity()
 export class Ad extends BaseEntity {
@@ -14,6 +18,7 @@ export class Ad extends BaseEntity {
   id!: number
 
   @Column()
+  @Length(3, 100)
   title!: string
 
   @Column({ nullable: true })
@@ -22,7 +27,6 @@ export class Ad extends BaseEntity {
   description!: string
 
   @Column()
-  @IsInt()
   price!: number
 
   @Column()
@@ -37,6 +41,10 @@ export class Ad extends BaseEntity {
   @ManyToOne(() => Category, (category) => category.ads)
   category!: Category
 
-  @Column()
-  dateAtCreated!: Date
+  @ManyToMany(() => Tag, (tag) => tag.ads)
+  @JoinTable()
+  tags!: Tag[]
+
+  @CreateDateColumn()
+  createdAt!: Date
 }

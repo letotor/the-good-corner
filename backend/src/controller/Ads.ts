@@ -50,7 +50,8 @@ export class AdsController implements Icontroller {
       ad.location = location
       ad.category = { ...category }
       ad.owner = owner
-      ad.dateAtCreated = new Date(Date.now())
+      ad.tags = []
+      ad.createdAt = new Date(Date.now())
 
       const errors = await validate(ad)
       if (errors.length > 0) {
@@ -90,11 +91,7 @@ export class AdsController implements Icontroller {
       if (!ad) {
         return res.status(404).send()
       }
-      console.log('111111111111111', ad)
-
       const resz = Object.assign(ad, req.body)
-      console.log('111111111111112', resz)
-
       const errors = await validate(ad)
 
       if (errors.length > 0) {
