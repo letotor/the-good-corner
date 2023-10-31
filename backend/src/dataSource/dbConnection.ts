@@ -1,11 +1,11 @@
 import { DataSource } from 'typeorm'
-import { Ad, Category, Tag } from '../entities/'
+import { Ad } from '../entities/'
 
 export const dataSource = new DataSource({
   type: 'sqlite',
   database: './bdd/ads.db', // Path to your database file. a aprtir de la racine du projet
-  entities: [Ad, Category, Tag],
+  entities: [Ad],
   synchronize: true,
   logging: true,
-  migrations: ['./migration/**/*.ts'],
+  // migrations: ['./migration/**/*.ts'],
 })

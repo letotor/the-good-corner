@@ -8,22 +8,26 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm'
+
 import { Length, ValidateIf, IsInt } from 'class-validator'
-import { Category } from './Category'
-import { Tag } from './Tag'
+import { Field, ID, InputType, Int, ObjectType } from 'type-graphql'
 
 @Entity()
+@ObjectType()
 export class Ad extends BaseEntity {
   @PrimaryGeneratedColumn()
+  @Field(() => ID)
   id!: number
 
   @Column()
+  @Field()
   @Length(3, 100)
   title!: string
 
   @Column({ nullable: true })
   @Length(0, 5000)
   @ValidateIf((object, value) => !!value)
+  @Field()
   description!: string
 
   @Column()
@@ -38,13 +42,7 @@ export class Ad extends BaseEntity {
   @Column()
   owner!: string
 
-  @ManyToOne(() => Category, (category) => category.ads)
-  category!: Category
-
-  @ManyToMany(() => Tag, (tag) => tag.ads)
-  @JoinTable()
-  tags!: Tag[]
-
   @CreateDateColumn()
+  @Field()
   createdAt!: Date
 }

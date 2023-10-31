@@ -1,20 +1,28 @@
-import express from 'express'
 import 'reflect-metadata'
-console.log(' the good corner!')
 import { dataSource } from './dataSource/dbConnection'
-import cors from 'cors'
-import setupRoutes from './routes'
-const PORT = 5000
-const app = express()
-app.use(cors())
-app.use(express.json())
-setupRoutes(app)
+import { AdsResolver } from './resolvers/Ads'
+import { ApolloServer } from '@apollo/server'
+import { startStandaloneServer } from '@apollo/server/standalone'
+import { buildSchema } from 'type-graphql'
 
-app
-  .listen(PORT, async () => {
-    await dataSource.initialize()
-    console.log(`🚀 Server ready on port ${PORT} ! `)
+async function start() {
+  await dataSource.initialize()
+
+  const schema = await buildSchema({
+    resolvers: [AdsResolver],
   })
-  .on('error', (err: Error) => {
-    console.error('Error on  serveur :', err)
+
+  const server = new ApolloServer({
+    schema,
   })
+
+  await startStandaloneServer(server, {
+    listen: {
+      port: 5000,
+    },
+  })
+
+  console.log('🚀 Server started!')
+}
+
+start()
