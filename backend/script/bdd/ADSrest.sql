@@ -14,35 +14,16 @@ CREATE TABLE Ad (
     location varchar(50),
     owner varchar(50),
     categoryId  INTEGER,
-    createdAt DATE,
-    FOREIGN KEY(categoryId) REFERENCES CATEGORY(id)
+    dateAtCreated DATE,
+    FOREIGN KEY(category) REFERENCES CATEGORY(id)
 );
 
- SELECT "Ad"."id" AS "Ad_id", "Ad"."title" AS "Ad_title", "Ad"."description" AS "Ad_description", "Ad"."price" AS "Ad_price", "Ad"."picture" AS "Ad_picture", "Ad"."location" AS "Ad_location", "Ad"."owner" AS "Ad_owner", "Ad"."createdAt" AS "Ad_createdAt", "Ad"."categoryId" AS "Ad_categoryId", "Ad__Ad_category"."id" AS "Ad__Ad_category_id", "Ad__Ad_category"."name" AS "Ad__Ad_category_name" FROM "ad" "Ad" LEFT JOIN "category" "Ad__Ad_category" ON "Ad__Ad_category"."id"="Ad"."categoryId"
+
 
 -- INSERTION DES DONNEE DANS LA TABLE CATEGORY
 PRAGMA foreign_keys = ON; -- permet de garder les relation entre talbe et contrainte pour ne pas effacer et casser la structure
 INSERT INTO CATEGORY (name) VALUES ('Vêtement'),('Téléphonie'), ('Immobilier'), ('Véhicules'), ('Informatique'), ('Maison'), ('Emploi'), ('Loisirs'), ('Mode'), ('Multimédia'), ('Hifi'), ('Matériel professionnel'), ('Musique'), ('Montres & Bijoux'), ('Jeux vidéo & Consoles'), ('Sacs & Accessoires'), ('Autres');
 
--- PRAGMA foreign_keys = ON;
--- INSERT  INTO CATEGORY (id, name) VALUES 
--- (1, 'Vêtement'),
--- (2, 'Téléphonie'),
--- (3, 'Immobilier'),
--- (4, 'Véhicules'),
--- (5, 'Informatique'),
--- (6, 'Maison'),
--- (7, 'Emploi'),
--- (8, 'Loisirs'),
--- (9, 'Mode'),
--- (10, 'Multimédia'),
--- (11, 'Hifi'),
--- (12, 'Matériel professionnel'),
--- (13, 'Musique'),
--- (14, 'Montres & Bijoux'),
--- (15, 'Jeux vidéo & Consoles'),
--- (16, 'Sacs & Accessoires'),
--- (17, 'Autres');
 -- VIDER LA TABLE si NECESSAIRE
 --  TRUNCATE TABLE ad;
 
@@ -50,7 +31,7 @@ INSERT INTO CATEGORY (name) VALUES ('Vêtement'),('Téléphonie'), ('Immobilier'
 -- INSERTION DES DONNEe
 PRAGMA foreign_keys = ON;
 DELETE FROM Ad;
-INSERT INTO Ad (title, description, price, picture, location, categoryId, createdAt,owner )
+INSERT INTO Ad (title, description, price, picture, location, categoryId, dateAtCreated,owner )
 VALUES
   ('iPhone 13 Pro', 'iPhone 13 Pro 256 Go en excellent état', 900, 'https://cdn.pixabay.com/photo/2014/08/05/10/27/iphone-410311_640.jpg', 'Paris', 2, '2023-09-20', 'Jean Dupont'),
   ('iPhone 12 Pro', 'iPhone 12 bon état', 300, 'https://cdn.pixabay.com/photo/2016/11/29/07/06/apple-1867991_640.jpg', 'Paris', 2, '2022-09-20', 'Marie Martin'),
