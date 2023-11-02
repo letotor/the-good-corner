@@ -1,5 +1,5 @@
 import { AdCreateInput } from './../entities/Ad'
-import { Arg, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql'
 import { Ad, Category } from '../entities'
 
 import { validate } from 'class-validator'
@@ -9,9 +9,19 @@ import { validate } from 'class-validator'
 export class AdsResolver {
   @Query(() => [Ad], { nullable: true })
   async allAds(): Promise<Ad[] | null> {
-    const ads = await Ad.find({ relations: { category: true } })
+    const ads = await Ad.find({ relations: { category: true, tags: true } })
     return ads
     // return await dataSource.manager.find(Ad, { relations: { category: true } })
+  }
+
+  @Query(() => Ad, { nullable: true })
+  async ad(@Arg('id', () => ID) id: number): Promise<Ad | null> {
+    const ad = await Ad.findOne({
+      where: { id: id },
+      relations: { category: true, tags: true },
+    })
+
+    return ad
   }
 
   @Mutation(() => Ad)

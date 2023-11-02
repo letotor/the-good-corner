@@ -64,8 +64,9 @@ export class Ad extends BaseEntity {
   // ecommandé d'écrire le @JoinColumn() pour plus de clarté. Cela permet de spécifier explicitement la colonne de jointure qui sera utilisée pour la relation.
   category!: Category
 
-  @ManyToMany(() => Tag, (tag) => tag.ads)
+  @ManyToMany(() => Tag, (tag) => tag.ads, { cascade: ['remove'] })
   @JoinTable()
+  @Field(() => [Tag])
   tags!: Tag[]
 }
 

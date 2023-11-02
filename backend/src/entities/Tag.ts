@@ -7,9 +7,10 @@ import {
 } from 'typeorm'
 import { Ad } from './Ad'
 import { Length } from 'class-validator'
-import { Field, ID, InputType } from 'type-graphql'
+import { Field, ID, InputType, ObjectType } from 'type-graphql'
 
 @Entity()
+@ObjectType()
 export class Tag extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
@@ -20,7 +21,8 @@ export class Tag extends BaseEntity {
   @Field()
   name!: string
 
-  @ManyToMany(() => Ad, (ad) => ad.id)
+  @ManyToMany(() => Ad, (ad) => ad.tags)
+  @Field(() => [Ad])
   ads!: Ad[]
 }
 
